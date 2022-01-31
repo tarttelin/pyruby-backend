@@ -1,19 +1,22 @@
 steps:
+  - name: europe-west2-docker.pkg.dev/pyruby-web-home/pyruby-web-home/python-builder:0.1
+    args:
+      - make
+      - ci
+    id: run CI checks
   - name: gcr.io/cloud-builders/docker
     args:
       - build
       - '--no-cache'
       - '-t'
       - '$_GAR_HOSTNAME/$_ARTIFACT_REPO/$_SERVICE_NAME:$COMMIT_SHA'
-      - backend
-      - '-f'
-      - backend/Dockerfile
-    id: Build
+      - '.'
+    id: Build deployable
   - name: gcr.io/cloud-builders/docker
     args:
       - push
-      - '$_GCR_HOSTNAME/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
-    id: Push
+      - '$_GAR_HOSTNAME/$_ARTIFACT_REPO/$_SERVICE_NAME:$COMMIT_SHA'
+    id: Push docker image
   - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk:slim'
     args:
       - run
@@ -21,15 +24,15 @@ steps:
       - update
       - $_SERVICE_NAME
       - '--platform=managed'
-      - '--image=$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+      - '--image=$_GAR_HOSTNAME/$_ARTIFACT_REPO/$_SERVICE_NAME:$COMMIT_SHA'
       - >-
         --labels=commit-sha=$COMMIT_SHA,gcb-build-id=$BUILD_ID,$_LABELS
       - '--region=$_DEPLOY_REGION'
       - '--quiet'
-    id: Deploy
+    id: Deploy to cloud run
     entrypoint: gcloud
 images:
-  - '$_GCR_HOSTNAME/$PROJECT_ID/$REPO_NAME/$_SERVICE_NAME:$COMMIT_SHA'
+  - '$_GAR_HOSTNAME/$_ARTIFACT_REPO/$_SERVICE_NAME:$COMMIT_SHA'
 options:
   substitutionOption: ALLOW_LOOSE
 substitutions:
@@ -38,7 +41,7 @@ substitutions:
   _SERVICE_NAME: pyruby-backend
   _DEPLOY_REGION: europe-west2
   _GAR_HOSTNAME: europe-west2-docker.pkg.dev
-  _ARTIFACT_REPO: pyruby-web-home
+  _ARTIFACT_REPO: pyruby-web-home/pyruby-web-home
 tags:
   - gcp-cloud-build-deploy-cloud-run
   - gcp-cloud-build-deploy-cloud-run-managed

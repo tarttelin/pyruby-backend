@@ -1,0 +1,28 @@
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - '--no-cache'
+      - '-t'
+      - '$_GAR_HOSTNAME/$_ARTIFACT_REPO/$_SERVICE_NAME:$_VERSION'
+      - '.'
+    id: Build
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - '$_GAR_HOSTNAME/$_ARTIFACT_REPO/$_SERVICE_NAME:$_VERSION'
+    id: Push
+images:
+  - '$_GAR_HOSTNAME/$_ARTIFACT_REPO/$_SERVICE_NAME:$_VERSION'
+options:
+  substitutionOption: ALLOW_LOOSE
+substitutions:
+  _PLATFORM: managed
+  _LABELS: service-manager=pyruby
+  _SERVICE_NAME: python-builder
+  _DEPLOY_REGION: europe-west2
+  _GAR_HOSTNAME: europe-west2-docker.pkg.dev
+  _ARTIFACT_REPO: pyruby-web-home/pyruby-web-home
+  _VERSION: "0.1"
+tags:
+  - pyruby-backend
