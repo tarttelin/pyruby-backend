@@ -1,0 +1,5 @@
+type Query {
+    hello: String!
+    me(cacheBust: String): User!
+    userById(userId: ID!): User!
+}

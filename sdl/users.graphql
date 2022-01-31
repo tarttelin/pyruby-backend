@@ -1,0 +1,24 @@
+
+input InviteUser {
+    inviteEmail: String!
+    personId: ID!
+}
+
+type User {
+    id: ID!
+    person: Person!
+    email: String!
+    username: String
+}
+
+type Invite {
+    id: ID!
+    inviteEmail: String!
+    personId: ID!
+    expiryTime: Int!
+}
+
+type UserConnection {
+    items: [User!]!
+    nextToken: String
+}
