@@ -1,5 +1,5 @@
 steps:
-  - name: europe-west2-docker.pkg.dev/pyruby-web-home/pyruby-web-home/python-builder:0.1
+  - name: europe-west2-docker.pkg.dev/pyruby-web-home/pyruby-web-home/python-builder:0.2
     args:
       - make
       - ci
