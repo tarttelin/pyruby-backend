@@ -23,6 +23,6 @@ substitutions:
   _DEPLOY_REGION: europe-west2
   _GAR_HOSTNAME: europe-west2-docker.pkg.dev
   _ARTIFACT_REPO: pyruby-web-home/pyruby-web-home
-  _VERSION: "0.4"
+  _VERSION: "0.5"
 tags:
   - pyruby-backend
