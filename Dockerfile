@@ -8,4 +8,4 @@ COPY . ./
 
 RUN pip install --no-cache-dir -r requirements.txt
 
-CMD exec uvicorn --port $PORT pyruby_backend.main:app
+CMD exec uvicorn --host 0.0.0.0 --port $PORT pyruby_backend.main:app
