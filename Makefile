@@ -2,7 +2,7 @@
 ci: install test flake8 reqs
 
 install:
-	pipenv install --dev
+	pipenv --python 3.10 install --dev
 
 test:
 	pipenv run pytest
