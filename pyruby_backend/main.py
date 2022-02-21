@@ -1,22 +1,21 @@
 from firebase_admin import auth
 import firebase_admin
-from ariadne import QueryType, make_executable_schema, load_schema_from_path
+from ariadne import QueryType, MutationType, make_executable_schema, load_schema_from_path
 from ariadne.asgi import GraphQL
 from starlette.applications import Starlette
 from starlette.requests import Request
 from pathlib import Path
+from .user_resolvers import register_resolvers
 
 sdl_dir = Path(__file__).parent.parent / "sdl"
 type_defs = load_schema_from_path(sdl_dir)
 
 query = QueryType()
+mutation = MutationType()
 
 firebase_admin.initialize_app(options={'projectId': 'pyruby-web-home'})
 
-
-@query.field("hello")
-def resolve_hello(_, info):
-    return f"Hello {info.context['user']['name']}!"
+register_resolvers(query, mutation)
 
 
 def get_context_value(request: Request):
@@ -28,7 +27,7 @@ def get_context_value(request: Request):
     return {'request': request, 'user': user}
 
 
-schema = make_executable_schema(type_defs, query)
+schema = make_executable_schema(type_defs, query, mutation)
 
 app = Starlette(debug=True)
 app.mount("/graphql", GraphQL(schema, context_value=get_context_value, debug=True))

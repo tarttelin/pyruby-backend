@@ -1,7 +1,17 @@
 
+extend type Query {
+    me(cacheBust: String): User!
+    userById(id: ID!): User!
+}
+
 input InviteUser {
     inviteEmail: String!
     personId: ID!
+}
+
+input CreateUser {
+    email: String!
+    username: String!
 }
 
 type User {
