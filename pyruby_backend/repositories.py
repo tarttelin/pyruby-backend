@@ -1,6 +1,6 @@
 from firebase_admin import firestore
 
-from pyruby_backend.models import User
+from pyruby_backend.models import User, Invite
 
 
 class UserRepo(object):
@@ -15,3 +15,6 @@ class UserRepo(object):
         result = self.db.collection(u'users').document(id).get()
 
         return User(id=result.id, **result.to_dict())
+
+    def add_invite(self, invite: Invite):
+        self.db.collection(u'invites').document(invite.id).set(invite.dict(exclude={'id', }))

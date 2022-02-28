@@ -11,4 +11,4 @@ flake8:
 	pipenv run flake8 pyruby_backend
 
 reqs:
-	pipenv run pip freeze > requirements.txt
+	pipenv lock -r > requirements.txt
