@@ -19,10 +19,10 @@ options:
 substitutions:
   _PLATFORM: managed
   _LABELS: service-manager=pyruby
-  _SERVICE_NAME: python-builder
+  _SERVICE_NAME: firebase-builder
   _DEPLOY_REGION: europe-west2
   _GAR_HOSTNAME: europe-west2-docker.pkg.dev
   _ARTIFACT_REPO: pyruby-web-home/pyruby-web-home
-  _VERSION: "0.7"
+  _VERSION: "0.1"
 tags:
   - pyruby-backend

@@ -1,8 +1,26 @@
 steps:
-  - name: europe-west2-docker.pkg.dev/pyruby-web-home/pyruby-web-home/python-builder:0.6
+  - name: gcr.io/cloud-builders/docker
     args:
+      - run
+      - -d
+      - --network=cloudbuild
+      - --name=firebase-runner
+      - europe-west2-docker.pkg.dev/pyruby-web-home/pyruby-web-home/firebase-builder:0.1
+      - emulators:start
+      - --project=dummy
+    id: start firebase
+  - name: europe-west2-docker.pkg.dev/pyruby-web-home/pyruby-web-home/python-builder:0.7
+    args:
+      - wait-for-it
+      - firebase-runner:9099
+      - -s
+      - --timeout=60
+      - --
       - make
       - ci
+    env:
+      - FIRESTORE_EMULATOR_HOST=firebase-runner:8080
+      - FIREBASE_AUTH_EMULATOR_HOST=firebase-runner:9099
     id: run CI checks
   - name: gcr.io/cloud-builders/docker
     args:
