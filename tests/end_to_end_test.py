@@ -9,7 +9,7 @@ def test_app():
     assert "hello" in response.json()["data"].keys()
 
 
-def test_create_user():
+def test_create_user(admin_creds):
     client = TestClient(main.app)
     create_user_gql = """
     mutation createUser($email: String!, $username: String!) {
@@ -20,7 +20,7 @@ def test_create_user():
         }
     }
     """
-    response = client.post("/graphql/", json={
+    response = client.post("/graphql/", headers={"authorization": f"Bearer {admin_creds}"}, json={
         'query': create_user_gql,
         'operationName': 'createUser',
         'variables': {
@@ -30,3 +30,4 @@ def test_create_user():
     })
     assert response.status_code == 200
     assert response.json()["data"]["createUser"]["username"] == "sir_codalot"
+
