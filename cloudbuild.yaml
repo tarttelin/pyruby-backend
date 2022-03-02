@@ -7,7 +7,7 @@ steps:
       - --name=firebase-runner
       - europe-west2-docker.pkg.dev/pyruby-web-home/pyruby-web-home/firebase-builder:0.1
       - emulators:start
-      - --project=dummy
+      - --project=$PROJECT_ID
     id: start firebase
   - name: europe-west2-docker.pkg.dev/pyruby-web-home/pyruby-web-home/python-builder:0.7
     args:
