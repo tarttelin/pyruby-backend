@@ -1,4 +1,4 @@
-from firebase_admin import firestore, initialize_app
+from firebase_admin import firestore
 
 from pyruby_backend.models import User, Invitation
 
