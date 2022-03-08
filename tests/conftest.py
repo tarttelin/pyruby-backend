@@ -18,23 +18,23 @@ def delete_users():
 
 
 @pytest.fixture(scope="module")
-def admin_creds():
+def admin_user():
     data = {"email": "admin_user@example.com", "password": "password", "returnSecureToken": True}
     user = _auth_command(None, data)
     _auth_command("update", {'localId': user['localId'], 'customAttributes': '{"role": "admin"}'})
     login = _auth_command("signInWithPassword?key=dummy_key", data, headers={}, project="")
 
-    return login['idToken']
+    return login
 
 
 @pytest.fixture(scope="module")
-def user_creds():
+def base_user():
     data = {"email": "basic_user@example.com", "password": "password", "returnSecureToken": True}
     user = _auth_command(None, data)
     _auth_command("update", {'localId': user['localId'], 'customAttributes': '{"role": "user"}'})
     login = _auth_command("signInWithPassword?key=dummy_key", data, headers={}, project="")
 
-    return login['idToken']
+    return login
 
 
 def _auth_command(command, payload, project="/projects/pyruby-web-home", headers={"authorization": "Bearer owner"}):

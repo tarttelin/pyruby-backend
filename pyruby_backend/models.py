@@ -3,12 +3,19 @@ from pydantic import BaseModel
 
 class User(BaseModel):
     id: str
-    email: str
-    username: str
+    primary_email: str
+    full_name: str
 
 
-class Invite(BaseModel):
+class Invitation(BaseModel):
     id: str
-    invite_email: str
-    person_id: str
+    email: str
+    user_id: str
     expiry_time: int
+    sent_by_id: str
+
+
+class Login(BaseModel):
+    uid: str
+    email: str
+    user_id: str

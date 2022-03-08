@@ -2,33 +2,50 @@
 extend type Query {
     me(cacheBust: String): User!
     userById(id: ID!): User!
+    invitationByEmailAddress(email: String!): Invitation
+}
+
+extend type Mutation {
+    sendInvitation(input: InviteUser!): Invitation
+    acceptInvitation(input: AcceptInvitation): Login
+    createUser(input: CreateUser!): User
 }
 
 input InviteUser {
-    inviteEmail: String!
-    personId: ID!
+    userId: ID!
+    email: String!
 }
 
 input CreateUser {
-    email: String!
-    username: String!
+    primaryEmail: String!
+    fullName: String!
+}
+
+input AcceptInvitation {
+    invitationId: ID!
 }
 
 type User {
     id: ID!
-    person: Person!
-    email: String!
-    username: String
+    fullName: String!
+    primaryEmail: String!
 }
 
-type Invite {
+type Invitation {
     id: ID!
-    inviteEmail: String!
-    personId: ID!
+    email: String!
+    user: User!
     expiryTime: Int!
+    sentBy: User
 }
 
 type UserConnection {
     items: [User!]!
     nextToken: String
+}
+
+type Login {
+    uid: ID!
+    user: User!
+    email: String!
 }

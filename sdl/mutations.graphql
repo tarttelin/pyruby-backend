@@ -1,4 +1,3 @@
 type Mutation {
-    sendInvite(input: InviteUser!): Invite
-    createUser(input: CreateUser!): User
+  doNothing: String
 }

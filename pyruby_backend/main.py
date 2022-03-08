@@ -1,6 +1,6 @@
 from firebase_admin import auth
 import firebase_admin
-from ariadne import QueryType, MutationType, make_executable_schema, load_schema_from_path
+from ariadne import QueryType, MutationType, make_executable_schema, load_schema_from_path, snake_case_fallback_resolvers
 from ariadne.asgi import GraphQL
 from starlette.applications import Starlette
 from starlette.requests import Request
@@ -15,7 +15,7 @@ mutation = MutationType()
 
 firebase_admin.initialize_app(options={'projectId': 'pyruby-web-home'})
 
-register_resolvers(query, mutation)
+object_types = register_resolvers(query, mutation)
 
 
 def get_context_value(request: Request):
@@ -27,7 +27,7 @@ def get_context_value(request: Request):
     return {'request': request, 'user': user}
 
 
-schema = make_executable_schema(type_defs, query, mutation)
+schema = make_executable_schema(type_defs, query, mutation, snake_case_fallback_resolvers, *object_types)
 
 app = Starlette(debug=True)
 app.mount("/graphql", GraphQL(schema, context_value=get_context_value, debug=True))
