@@ -1,3 +1,5 @@
+directive @hasAuth(roles: [String!]!) on FIELD_DEFINITION
+
 type Mutation {
   doNothing: String
 }

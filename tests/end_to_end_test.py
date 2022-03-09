@@ -68,6 +68,26 @@ def test_user_registration_journey(admin_user, base_user):
     assert me['fullName'] == 'Bobby McBob'
 
 
+def test_only_admin_users_can_create_new_users(base_user):
+    client = TestClient(main.app)
+    create_user_gql = """
+        mutation createUser($email: String!, $name: String!) {
+            createUser(input: {primaryEmail: $email, fullName: $name}) {
+                id
+                primaryEmail
+                fullName
+            }
+        }
+        """
+    response = client.post("/graphql/", headers={"authorization": f"Bearer {base_user['idToken']}"}, json={
+        'query': create_user_gql,
+        'operationName': "createUser",
+        'variables': {"email": base_user['email'], "name": "Bobby McBob"}
+    })
+    assert response.json().get("errors") is not None
+    assert response.json().get("errors")[0]["path"][0] == "createUser"
+
+
 def _run_gql(client, query, args, operation, user):
     response = client.post("/graphql/", headers={"authorization": f"Bearer {user['idToken']}"}, json={
         'query': query,

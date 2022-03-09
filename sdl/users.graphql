@@ -1,14 +1,14 @@
 
 extend type Query {
-    me(cacheBust: String): User!
-    userById(id: ID!): User!
-    invitationByEmailAddress(email: String!): Invitation
+    me(cacheBust: String): User! @hasAuth(roles: ["user", "admin"])
+    userById(id: ID!): User! @hasAuth(roles: ["admin"])
+    invitationByEmailAddress(email: String!): Invitation @hasAuth(roles: ["admin"])
 }
 
 extend type Mutation {
-    sendInvitation(input: InviteUser!): Invitation
-    acceptInvitation(input: AcceptInvitation): Login
-    createUser(input: CreateUser!): User
+    sendInvitation(input: InviteUser!): Invitation @hasAuth(roles: ["admin"])
+    acceptInvitation(input: AcceptInvitation): Login @hasAuth(roles: ["user", "admin"])
+    createUser(input: CreateUser!): User @hasAuth(roles: ["admin"])
 }
 
 input InviteUser {
